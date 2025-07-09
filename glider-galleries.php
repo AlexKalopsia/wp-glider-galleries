@@ -3,7 +3,7 @@
  * Plugin Name: WP Glider Galleries
  * Description: Simple plugin that replaces Jetpack slideshows and adds a block to create new Glider galleries.
  * Version: 1.0
- * 
+ * Domain Path: /languages
  */
 
 add_action('wp_enqueue_scripts', function () {
@@ -67,8 +67,8 @@ add_shortcode('glider_gallery', function ($atts) {
     return $html;
 });
 
-// Convert Jetpack slideshow
-add_filter('render_block', function($block_content, $block) {
+// Convert Jetpack slideshow to Glider gallery
+add_filter('render_block', function ($block_content, $block) {
     if ($block['blockName'] === 'jetpack/slideshow' && !empty($block['attrs']['ids'])) {
         $ids = implode(',', array_map('intval', $block['attrs']['ids']));
         return do_shortcode('[glider_gallery ids="' . esc_attr($ids) . '"]');
@@ -78,15 +78,18 @@ add_filter('render_block', function($block_content, $block) {
 
 function glider_register_block() {
     wp_register_script(
-        'glider-block',
+        'glider-gallery-block',
         plugins_url('block.js', __FILE__),
-        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils', 'wp-api'],
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils', 'wp-api', 'wp-i18n'],
         filemtime(plugin_dir_path(__FILE__) . 'block.js'),
         true
     );
 
+    wp_set_script_translations('glider-gallery-block', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
+    wp_enqueue_script('glider-gallery-block');
+
     register_block_type('glider/gallery', [
-        'editor_script' => 'glider-block',
+        'editor_script' => 'glider-gallery-block',
         'render_callback' => function ($attributes) {
             $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
             return do_shortcode("[glider_gallery ids=\"$ids\"]");
@@ -95,9 +98,7 @@ function glider_register_block() {
             'ids' => [
                 'type' => 'array',
                 'default' => [],
-                'items' => [
-                    'type' => 'number'
-                ],
+                'items' => ['type' => 'number'],
             ],
         ],
     ]);
@@ -105,12 +106,28 @@ function glider_register_block() {
 add_action('init', 'glider_register_block');
 
 function glider_enqueue_editor_notice() {
-    wp_enqueue_script(
+    wp_register_script(
         'glider-jetpack-editor',
         plugin_dir_url(__FILE__) . 'glider-jetpack-editor.js',
-        [ 'wp-dom-ready' ],
-        false,
+        ['wp-dom-ready', 'wp-i18n'],
+        filemtime(plugin_dir_path(__FILE__) . 'glider-jetpack-editor.js'),
         true
     );
+
+    wp_set_script_translations('glider-jetpack-editor', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
+    wp_enqueue_script('glider-jetpack-editor');
 }
 add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
+
+add_action('init', function () {
+    __('Edit Gallery', 'wp-glider-galleries');
+    $loaded = load_plugin_textdomain('wp-glider-galleries', false, plugin_basename(dirname(__FILE__)) . '/languages');
+    error_log('load_plugin_textdomain returned: ' . var_export($loaded, true));
+    error_log('Current locale: ' . get_locale());
+    error_log('Languages dir: ' . plugin_basename(dirname(__FILE__)) . '/languages');
+    if (is_textdomain_loaded('wp-glider-galleries')) {
+        error_log('Textdomain wp-glider-galleries is loaded!');
+    } else {
+        error_log('Textdomain wp-glider-galleries NOT loaded.');
+    }
+});
