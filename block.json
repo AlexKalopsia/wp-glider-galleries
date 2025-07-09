@@ -1,0 +1,17 @@
+{
+  "apiVersion": 3,
+  "name": "glider/gallery",
+  "title": "Glider Gallery",
+  "description": "Simple media gallery overriding pre-existing Jetpack slideshows.",
+  "category": "media",
+  "icon": "images-alt2",
+  "version": "0.1",
+  "textdomain": "wp-glider-galleries",
+  "editorScript": "glider-gallery-block",
+  "attributes": {
+    "ids": {
+      "type": "array",
+      "default": []
+    }
+  }
+}

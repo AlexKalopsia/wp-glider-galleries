@@ -17,14 +17,10 @@ add_action('wp_enqueue_scripts', function () {
                 const next = el.parentElement.querySelector('.glider-next');
                 const dots = el.parentElement.querySelector('.glider-dots');
 
-                console.log('Glider init:', el);
-
                 const glider = new Glider(el, {
                     slidesToShow: 1,
                     dots: dots,
                 });
-
-                console.log('Glider instance:', glider);
 
                 if (prev) {
                     prev.addEventListener('click', () => {
@@ -88,19 +84,11 @@ function glider_register_block() {
     wp_set_script_translations('glider-gallery-block', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
     wp_enqueue_script('glider-gallery-block');
 
-    register_block_type('glider/gallery', [
-        'editor_script' => 'glider-gallery-block',
+    register_block_type(plugin_dir_url(__FILE__) . 'block.json', [
         'render_callback' => function ($attributes) {
             $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
             return do_shortcode("[glider_gallery ids=\"$ids\"]");
         },
-        'attributes' => [
-            'ids' => [
-                'type' => 'array',
-                'default' => [],
-                'items' => ['type' => 'number'],
-            ],
-        ],
     ]);
 }
 add_action('init', 'glider_register_block');
