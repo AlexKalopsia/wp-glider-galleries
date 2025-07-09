@@ -9,13 +9,10 @@
 
     // Always re-run "wp i18n make-json languages" to generate updated json translations
 
+    const metadata = window.gliderGalleryBlock || {};
+
     registerBlockType('glider/gallery', {
-        title: 'Glider Gallery',
-        icon: 'images-alt2',
-        category: 'media',
-        attributes: {
-            ids: { type: 'array', default: [] },
-        },
+        ...metadata,
         edit: function ({ attributes, setAttributes }) {
             const { ids } = attributes;
 
@@ -38,7 +35,15 @@
 
             return wp.element.createElement(
                 'div',
-                { className: 'glider-block-editor' },
+                { 
+                    className: 'glider-block-editor',
+                    style: { 
+                        display: 'block',
+                        maxWidth: '1068px',
+                        margin: '0 auto',
+                        padding: '15px'
+                    }
+                 },
                 wp.element.createElement(MediaUpload, {
                     onSelect: onSelectImages,
                     allowedTypes: ['image'],

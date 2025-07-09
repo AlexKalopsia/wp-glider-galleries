@@ -8,10 +8,15 @@
   "version": "0.1",
   "textdomain": "wp-glider-galleries",
   "editorScript": "glider-gallery-block",
+  "editorStyle": "glider-block-editor-styles",
   "attributes": {
     "ids": {
       "type": "array",
       "default": []
     }
+  },
+  "supports": {
+    "align": ["wide", "full", "center"],
+    "html": false
   }
 }

@@ -2,11 +2,11 @@
 # This file is distributed under the same license as the WP Glider Galleries plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Glider Galleries 0.1\n"
+"Project-Id-Version: WP Glider Galleries 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-glider-"
 "galleries\n"
-"POT-Creation-Date: 2025-07-09T15:26:21+02:00\n"
-"PO-Revision-Date: 2025-07-09 15:48+0200\n"
+"POT-Creation-Date: 2025-07-09T17:26:41+02:00\n"
+"PO-Revision-Date: 2025-07-09 17:28+0200\n"
 "Last-Translator: Alex Camilleri\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -29,6 +29,10 @@ msgid ""
 msgstr ""
 "Semplice plugin che sostituisce gli slideshow Jetpack pre-esistenti e "
 "aggiunge un blocco dell'editor per creare nuove gallerie Glider."
+
+#: glider-galleries.php:88 block.js:13
+msgid "Glider Gallery"
+msgstr "Galleria Glider"
 
 #: block.js:52
 msgid "Edit Gallery"

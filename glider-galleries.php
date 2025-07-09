@@ -37,6 +37,16 @@ add_action('wp_enqueue_scripts', function () {
     ");
 });
 
+// Add editor styles
+add_action('enqueue_block_editor_assets', function() {
+    wp_enqueue_style(
+        'glider-block-editor-styles', 
+        plugins_url('style.css', __FILE__),
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'style.css')
+    );
+});
+
 // Shortcode: [glider_gallery ids="123,124,125"]
 add_shortcode('glider_gallery', function ($atts) {
     $atts = shortcode_atts([
@@ -72,11 +82,6 @@ add_filter('render_block', function ($block_content, $block) {
     return $block_content;
 }, 10, 2);
 
-add_action('init', function () {
-    load_plugin_textdomain('wp-glider-galleries', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}, 1);
-add_action('init', 'glider_register_block', 10);
-
 // Register Glider Gallery block
 function glider_register_block() {
     wp_register_script(
@@ -87,11 +92,8 @@ function glider_register_block() {
         true
     );
     
-    register_block_type(plugin_dir_url(__FILE__) . 'block.json', [
-        'render_callback' => function ($attributes) {
-            $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
-            return do_shortcode("[glider_gallery ids=\"$ids\"]");
-        },
+    register_block_type(__DIR__ . '/block.json', [
+        'render_callback' => 'glider_render_gallery',
     ]);
     error_log(__('Glider Gallery', 'wp-glider-galleries'));
     error_log(plugin_dir_url(__FILE__) . 'block.json');
@@ -99,15 +101,14 @@ function glider_register_block() {
 }
 add_action('init', 'glider_register_block');
 
-
-// Enqueue script: block assets
-function glider_enqueue_block_assets() {
-    
-
-    wp_set_script_translations('glider-gallery-block', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
-    wp_enqueue_script('glider-gallery-block');
+function glider_set_block_translations() {
+    wp_set_script_translations(
+        'glider-gallery-block',
+        'wp-glider-galleries',
+        plugin_dir_path(__FILE__) . 'languages'
+    );
 }
-add_action('enqueue_block_editor_assets', 'glider_enqueue_block_assets');
+add_action('enqueue_block_editor_assets', 'glider_set_block_translations');
 
 // Enqueue script: Jetpack gallery warning
 function glider_enqueue_editor_notice() {
@@ -123,3 +124,8 @@ function glider_enqueue_editor_notice() {
     wp_enqueue_script('glider-jetpack-editor');
 }
 add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
+
+function glider_render_gallery($attributes) {
+    $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
+    return do_shortcode("[glider_gallery ids=\"$ids\"]");
+}
