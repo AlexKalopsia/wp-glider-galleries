@@ -103,3 +103,14 @@ function glider_register_block() {
     ]);
 }
 add_action('init', 'glider_register_block');
+
+function glider_enqueue_editor_notice() {
+    wp_enqueue_script(
+        'glider-jetpack-editor',
+        plugin_dir_url(__FILE__) . 'glider-jetpack-editor.js',
+        [ 'wp-dom-ready' ],
+        false,
+        true
+    );
+}
+add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
