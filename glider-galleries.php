@@ -79,6 +79,14 @@ add_action('init', 'glider_register_block', 10);
 
 // Register Glider Gallery block
 function glider_register_block() {
+    wp_register_script(
+        'glider-gallery-block',
+        plugins_url('block.js', __FILE__),
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils', 'wp-api', 'wp-i18n'],
+        filemtime(plugin_dir_path(__FILE__) . 'block.js'),
+        true
+    );
+    
     register_block_type(plugin_dir_url(__FILE__) . 'block.json', [
         'render_callback' => function ($attributes) {
             $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
@@ -89,16 +97,12 @@ function glider_register_block() {
     error_log(plugin_dir_url(__FILE__) . 'block.json');
 
 }
+add_action('init', 'glider_register_block');
+
 
 // Enqueue script: block assets
 function glider_enqueue_block_assets() {
-    wp_register_script(
-        'glider-gallery-block',
-        plugins_url('block.js', __FILE__),
-        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils', 'wp-api', 'wp-i18n'],
-        filemtime(plugin_dir_path(__FILE__) . 'block.js'),
-        true
-    );
+    
 
     wp_set_script_translations('glider-gallery-block', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
     wp_enqueue_script('glider-gallery-block');
