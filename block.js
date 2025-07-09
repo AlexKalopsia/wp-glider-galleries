@@ -10,12 +10,6 @@
     // Always re-run "wp i18n make-json languages" to generate updated json translations
 
     registerBlockType('glider/gallery', {
-        title: 'Glider Gallery',
-        icon: 'images-alt2',
-        category: 'media',
-        attributes: {
-            ids: { type: 'array', default: [] },
-        },
         edit: function ({ attributes, setAttributes }) {
             const { ids } = attributes;
 
