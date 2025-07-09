@@ -72,7 +72,26 @@ add_filter('render_block', function ($block_content, $block) {
     return $block_content;
 }, 10, 2);
 
+add_action('init', function () {
+    load_plugin_textdomain('wp-glider-galleries', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}, 1);
+add_action('init', 'glider_register_block', 10);
+
+// Register Glider Gallery block
 function glider_register_block() {
+    register_block_type(plugin_dir_url(__FILE__) . 'block.json', [
+        'render_callback' => function ($attributes) {
+            $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
+            return do_shortcode("[glider_gallery ids=\"$ids\"]");
+        },
+    ]);
+    error_log(__('Glider Gallery', 'wp-glider-galleries'));
+    error_log(plugin_dir_url(__FILE__) . 'block.json');
+
+}
+
+// Enqueue script: block assets
+function glider_enqueue_block_assets() {
     wp_register_script(
         'glider-gallery-block',
         plugins_url('block.js', __FILE__),
@@ -83,16 +102,10 @@ function glider_register_block() {
 
     wp_set_script_translations('glider-gallery-block', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
     wp_enqueue_script('glider-gallery-block');
-
-    register_block_type(plugin_dir_url(__FILE__) . 'block.json', [
-        'render_callback' => function ($attributes) {
-            $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
-            return do_shortcode("[glider_gallery ids=\"$ids\"]");
-        },
-    ]);
 }
-add_action('init', 'glider_register_block');
+add_action('enqueue_block_editor_assets', 'glider_enqueue_block_assets');
 
+// Enqueue script: Jetpack gallery warning
 function glider_enqueue_editor_notice() {
     wp_register_script(
         'glider-jetpack-editor',
@@ -106,16 +119,3 @@ function glider_enqueue_editor_notice() {
     wp_enqueue_script('glider-jetpack-editor');
 }
 add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
-
-add_action('init', function () {
-    __('Edit Gallery', 'wp-glider-galleries');
-    $loaded = load_plugin_textdomain('wp-glider-galleries', false, plugin_basename(dirname(__FILE__)) . '/languages');
-    error_log('load_plugin_textdomain returned: ' . var_export($loaded, true));
-    error_log('Current locale: ' . get_locale());
-    error_log('Languages dir: ' . plugin_basename(dirname(__FILE__)) . '/languages');
-    if (is_textdomain_loaded('wp-glider-galleries')) {
-        error_log('Textdomain wp-glider-galleries is loaded!');
-    } else {
-        error_log('Textdomain wp-glider-galleries NOT loaded.');
-    }
-});
