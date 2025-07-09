@@ -1,8 +1,10 @@
 <?php
 /**
  * Plugin Name: WP Glider Galleries
+ * Plugin URI: https://github.com/AlexKalopsia/wp-glider-galleries
  * Description: Simple plugin that replaces Jetpack slideshows and adds a block to create new Glider galleries.
  * Version: 1.0
+ * Author: Alex Camilleri
  * Domain Path: /languages
  */
 
@@ -37,7 +39,7 @@ add_action('wp_enqueue_scripts', function () {
     ");
 });
 
-// Add editor styles
+// Enqueue style: editor
 add_action('enqueue_block_editor_assets', function() {
     wp_enqueue_style(
         'glider-block-editor-styles', 

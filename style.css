@@ -46,6 +46,7 @@
 }
 
 /* Editor-specific styles */
+
 .wp-block-glider-gallery {
     max-width: 100%;
     margin-left: auto !important;
@@ -60,7 +61,6 @@
     max-width: 800px;
 }
 
-/* Force the block wrapper to be block-level */
 .block-editor-block-list__block.wp-block-glider-gallery {
     display: block !important;
 }
