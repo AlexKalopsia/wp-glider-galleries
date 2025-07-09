@@ -1,10 +1,8 @@
 <?php
 /**
  * Plugin Name: WP Glider Galleries
- * Plugin URI: https://github.com/AlexKalopsia/wp-glider-galleries
  * Description: Simple plugin that replaces Jetpack slideshows and adds a block to create new Glider galleries.
- * Author: Alex Camilleri
- * Version: 0.1
+ * Version: 1.0
  * 
  */
 
@@ -19,10 +17,14 @@ add_action('wp_enqueue_scripts', function () {
                 const next = el.parentElement.querySelector('.glider-next');
                 const dots = el.parentElement.querySelector('.glider-dots');
 
+                console.log('Glider init:', el);
+
                 const glider = new Glider(el, {
                     slidesToShow: 1,
                     dots: dots,
                 });
+
+                console.log('Glider instance:', glider);
 
                 if (prev) {
                     prev.addEventListener('click', () => {
@@ -78,7 +80,7 @@ function glider_register_block() {
     wp_register_script(
         'glider-block',
         plugins_url('block.js', __FILE__),
-        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils'],
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-media-utils', 'wp-api'],
         filemtime(plugin_dir_path(__FILE__) . 'block.js'),
         true
     );
@@ -101,22 +103,3 @@ function glider_register_block() {
     ]);
 }
 add_action('init', 'glider_register_block');
-
-add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_script('glider-block');
-});
-
-add_action('enqueue_block_editor_assets', function () {
-    wp_enqueue_script('glider-block');
-});
-
-add_action('wp_head', function () {
-    echo '<style>
-        .glider-prev, .glider-next {
-            pointer-events: auto !important;
-            cursor: pointer;
-            z-index: 2;
-        }
-    </style>';
-});
-
