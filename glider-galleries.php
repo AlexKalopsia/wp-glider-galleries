@@ -112,18 +112,16 @@ add_action('enqueue_block_editor_assets', 'glider_set_block_translations');
 
 // Enqueue script: Jetpack gallery warning
 function glider_enqueue_editor_notice() {
-    wp_register_script(
+    wp_enqueue_script(
         'glider-jetpack-editor',
-        plugin_dir_url(__FILE__) . 'glider-jetpack-editor.js',
-        ['wp-dom-ready', 'wp-i18n'],
+        plugins_url('glider-jetpack-editor.js', __FILE__),
+        ['wp-blocks', 'wp-dom-ready', 'wp-i18n', 'wp-data', 'wp-editor'],
         filemtime(plugin_dir_path(__FILE__) . 'glider-jetpack-editor.js'),
         true
     );
-
     wp_set_script_translations('glider-jetpack-editor', 'wp-glider-galleries', plugin_dir_path(__FILE__) . 'languages');
-    wp_enqueue_script('glider-jetpack-editor');
 }
-add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
+add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice', 20);
 
 function glider_render_gallery($attributes) {
     $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
