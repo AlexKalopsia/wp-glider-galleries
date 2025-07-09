@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Glider Galleries
  * Description: Simple plugin that replaces Jetpack slideshows and adds a block to create new Glider galleries.
- * Version: 0.1
+ * Version: 1.0
  * Domain Path: /languages
  */
 
@@ -17,14 +17,10 @@ add_action('wp_enqueue_scripts', function () {
                 const next = el.parentElement.querySelector('.glider-next');
                 const dots = el.parentElement.querySelector('.glider-dots');
 
-                console.log('Glider init:', el);
-
                 const glider = new Glider(el, {
                     slidesToShow: 1,
                     dots: dots,
                 });
-
-                console.log('Glider instance:', glider);
 
                 if (prev) {
                     prev.addEventListener('click', () => {
@@ -39,6 +35,16 @@ add_action('wp_enqueue_scripts', function () {
             });
         });
     ");
+});
+
+// Add editor styles
+add_action('enqueue_block_editor_assets', function() {
+    wp_enqueue_style(
+        'glider-block-editor-styles', 
+        plugins_url('style.css', __FILE__),
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'style.css')
+    );
 });
 
 // Shortcode: [glider_gallery ids="123,124,125"]
@@ -76,6 +82,7 @@ add_filter('render_block', function ($block_content, $block) {
     return $block_content;
 }, 10, 2);
 
+// Register Glider Gallery block
 function glider_register_block() {
     wp_register_script(
         'glider-gallery-block',
@@ -84,10 +91,13 @@ function glider_register_block() {
         filemtime(plugin_dir_path(__FILE__) . 'block.js'),
         true
     );
-
+    
     register_block_type(__DIR__ . '/block.json', [
         'render_callback' => 'glider_render_gallery',
     ]);
+    error_log(__('Glider Gallery', 'wp-glider-galleries'));
+    error_log(plugin_dir_url(__FILE__) . 'block.json');
+
 }
 add_action('init', 'glider_register_block');
 
@@ -100,7 +110,7 @@ function glider_set_block_translations() {
 }
 add_action('enqueue_block_editor_assets', 'glider_set_block_translations');
 
-
+// Enqueue script: Jetpack gallery warning
 function glider_enqueue_editor_notice() {
     wp_register_script(
         'glider-jetpack-editor',

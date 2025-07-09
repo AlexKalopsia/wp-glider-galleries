@@ -1,5 +1,5 @@
 {
-  "apiVersion": 3,
+  "apiVersion": 2,
   "name": "glider/gallery",
   "title": "Glider Gallery",
   "description": "Simple media gallery overriding pre-existing Jetpack slideshows.",
@@ -8,11 +8,15 @@
   "version": "0.1",
   "textdomain": "wp-glider-galleries",
   "editorScript": "glider-gallery-block",
+  "editorStyle": "glider-block-editor-styles",
   "attributes": {
     "ids": {
       "type": "array",
       "default": []
     }
   },
-  "renderCallback": "glider_render_gallery"
+  "supports": {
+    "align": ["wide", "full", "center"],
+    "html": false
+  }
 }
