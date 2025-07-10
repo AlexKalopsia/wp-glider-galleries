@@ -17,6 +17,12 @@
   },
   "supports": {
     "align": ["wide", "full", "center"],
-    "html": false
+    "html": false,
+    "preview": true
+  },
+  "example": {
+    "attributes": {
+      "ids": [1, 2, 3]
+    }
   }
 }
