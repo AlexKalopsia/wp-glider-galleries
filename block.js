@@ -13,8 +13,17 @@
 
     registerBlockType('glider/gallery', {
         ...metadata,
-        edit: function ({ attributes, setAttributes }) {
+        edit: function ({ attributes, setAttributes, context }) {
             const { ids = [] } = attributes;
+
+            if (context?.isPreview) {
+                return wp.element.createElement('img', {
+                    src: metadata.previewImageUrl,
+                    alt: __('Example Glider Gallery Preview', 'wp-glider-galleries'),
+                    style: { width: '100%', height: 'auto', border: '1px solid #ccc' },
+                });
+            }
+        
 
             const images = useSelect(
                 (select) => ids.map((id) => select('core').getMedia(id)).filter(Boolean),

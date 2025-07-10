@@ -93,6 +93,12 @@ function glider_register_block() {
         filemtime(plugin_dir_path(__FILE__) . 'block.js'),
         true
     );
+
+    wp_add_inline_script(
+        $block_js_handle,
+        'window.gliderGalleryBlock = window.gliderGalleryBlock || {}; window.gliderGalleryBlock.previewImageUrl = ' . json_encode(plugins_url('preview.jpg', __FILE__)) . ';',
+        'before'
+    );
     
     register_block_type(__DIR__ . '/block.json', [
         'render_callback' => 'glider_render_gallery',
