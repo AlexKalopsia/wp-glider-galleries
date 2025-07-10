@@ -1,7 +1,7 @@
 (() => {
 
     const { registerBlockType } = wp.blocks;
-    const { MediaUpload } = wp.blockEditor;
+    const { MediaUpload, useBlockProps } = wp.blockEditor;
     const { Button } = wp.components;
     const { useState } = wp.element;
     const { useSelect } = wp.data;
@@ -41,13 +41,15 @@
 
             return (
                 wp.element.createElement('div', {
-                    className: 'glider-block-editor',
-                    style: {
-                        display: 'block',
-                        maxWidth: '1068px',
-                        margin: '0 auto',
-                        padding: '15px',
-                    },
+                    ...useBlockProps({
+                        className: 'glider-block-editor',
+                        style: {
+                            display: 'block',
+                            maxWidth: '1068px',
+                            margin: '0 auto',
+                            padding: '15px',
+                        },
+                    }),
                 },
                     wp.element.createElement(MediaUpload, {
                         onSelect: onSelectImages,
