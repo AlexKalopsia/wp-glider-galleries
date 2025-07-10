@@ -24,7 +24,6 @@
                         const media = getMedia(id);
                         if (media) return media;
 
-                        // Return placeholder structure while still loading
                         return {
                             id,
                             source_url: fallbackUrl,
