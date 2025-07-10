@@ -10,6 +10,7 @@
     // Always re-run "wp i18n make-json languages" to generate updated json translations
 
     const metadata = window.gliderGalleryBlock || {};
+    const fallbackUrl = window.gliderGalleryBlock?.fallbackImageUrl || '';
 
     registerBlockType('glider/gallery', {
         ...metadata,
@@ -17,7 +18,20 @@
             const { ids = [] } = attributes;
 
             const images = useSelect(
-                (select) => ids.map((id) => select('core').getMedia(id)).filter(Boolean),
+                (select) => {
+                    const getMedia = select('core').getMedia;
+                    return ids.map((id) => {
+                        const media = getMedia(id);
+                        if (media) return media;
+
+                        // Return placeholder structure while still loading
+                        return {
+                            id,
+                            source_url: fallbackUrl,
+                            alt_text: __('Missing image or loading...', 'wp-glider-galleries'),
+                        };
+                    });
+                },
                 [ids]
             );
 

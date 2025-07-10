@@ -93,12 +93,22 @@ function glider_register_block() {
         filemtime(plugin_dir_path(__FILE__) . 'block.js'),
         true
     );
+
+    $block_metadata = json_decode(file_get_contents(__DIR__ . '/block.json'), true);
+    wp_add_inline_script(
+        'glider-gallery-block',
+        'window.gliderGalleryBlock = ' . json_encode([
+            'metadata' => $block_metadata,
+            'fallbackImageUrl' => plugins_url('images/missing.jpg', __FILE__),
+        ]) . ';',
+        'before'
+    );
     
     register_block_type(__DIR__ . '/block.json', [
         'render_callback' => 'glider_render_gallery',
     ]);
-    error_log(__('Glider Gallery', 'wp-glider-galleries'));
-    error_log(plugin_dir_url(__FILE__) . 'block.json');
+    //error_log(__('Glider Gallery', 'wp-glider-galleries'));
+    //error_log(plugin_dir_url(__FILE__) . 'block.json');
 
 }
 add_action('init', 'glider_register_block');
