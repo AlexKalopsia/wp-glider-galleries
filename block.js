@@ -14,61 +14,63 @@
     registerBlockType('glider/gallery', {
         ...metadata,
         edit: function ({ attributes, setAttributes }) {
-            const { ids } = attributes;
+            const { ids = [] } = attributes;
 
-            const [images, setImages] = useState([]);
-
-            const onSelectImages = function (selectedImages) {
-                setAttributes({ ids: selectedImages.map(img => img.id) });
-                setImages(selectedImages);
-            };
-
-            const fetchedImages = useSelect(
-                (select) =>
-                    ids
-                        .map(id => select('core').getMedia(id))
-                        .filter(Boolean),
+            const images = useSelect(
+                (select) => ids.map((id) => select('core').getMedia(id)).filter(Boolean),
                 [ids]
             );
 
-            const displayedImages = images.length ? images : fetchedImages;
+            const onSelectImages = (selectedImages) => {
+                const newIds = selectedImages.map((img) => img.id);
+                setAttributes({ ids: newIds });
+            };
 
-            return wp.element.createElement(
-                'div',
-                { 
+            return (
+                wp.element.createElement('div', {
                     className: 'glider-block-editor',
-                    style: { 
+                    style: {
                         display: 'block',
                         maxWidth: '1068px',
                         margin: '0 auto',
-                        padding: '15px'
-                    }
-                 },
-                wp.element.createElement(MediaUpload, {
-                    onSelect: onSelectImages,
-                    allowedTypes: ['image'],
-                    multiple: true,
-                    gallery: true,
-                    value: ids,
-                    render: function ({ open }) {
-                        return wp.element.createElement(
-                            Button,
-                            { onClick: open, isSecondary: true },
-                            ids.length > 0 ? __('Edit Gallery', 'wp-glider-galleries') : __('Select Images', 'wp-glider-galleries')
-                        );
-                    }
-                }),
-                displayedImages.length > 0 &&
-                wp.element.createElement(
-                    'div',
-                    { style: { marginTop: '1em', display: 'flex', gap: '5px', flexWrap: 'wrap' } },
-                    displayedImages.map(img =>
-                        wp.element.createElement('img', {
-                            key: img.id,
-                            src: img.media_details?.sizes?.thumbnail?.source_url || img.source_url,
-                            alt: img.alt_text || '',
-                            style: { width: '100px', height: 'auto', objectFit: 'cover', borderRadius: '4px' }
-                        })
+                        padding: '15px',
+                    },
+                },
+                    wp.element.createElement(MediaUpload, {
+                        onSelect: onSelectImages,
+                        allowedTypes: ['image'],
+                        multiple: true,
+                        gallery: true,
+                        value: ids,
+                        render: ({ open }) =>
+                            wp.element.createElement(Button, { onClick: open, isSecondary: true },
+                                ids.length > 0
+                                    ? __('Edit Gallery', 'wp-glider-galleries')
+                                    : __('Select Images', 'wp-glider-galleries')
+                            ),
+                    }),
+                    images.length > 0 &&
+                    wp.element.createElement('div', {
+                        style: {
+                            marginTop: '1em',
+                            display: 'flex',
+                            gap: '5px',
+                            flexWrap: 'wrap',
+                        },
+                    },
+                        images.map((img) =>
+                            wp.element.createElement('img', {
+                                key: img.id,
+                                src: img.media_details?.sizes?.thumbnail?.source_url || img.source_url,
+                                alt: img.alt_text || '',
+                                style: {
+                                    width: '100px',
+                                    height: 'auto',
+                                    objectFit: 'cover',
+                                    borderRadius: '4px',
+                                },
+                            })
+                        )
                     )
                 )
             );
