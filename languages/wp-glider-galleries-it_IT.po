@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: WP Glider Galleries 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-glider-"
 "galleries\n"
-"POT-Creation-Date: 2025-07-09T17:26:41+02:00\n"
-"PO-Revision-Date: 2025-07-09 17:28+0200\n"
+"POT-Creation-Date: 2025-07-12T13:56:29+02:00\n"
+"PO-Revision-Date: 2025-07-12 14:02+0200\n"
 "Last-Translator: Alex Camilleri\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -19,36 +19,45 @@ msgstr ""
 #. Plugin Name of the plugin
 #: glider-galleries.php
 msgid "WP Glider Galleries"
-msgstr "WP Glider Galleries"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: glider-galleries.php
+msgid "https://github.com/AlexKalopsia/wp-glider-galleries"
+msgstr ""
 
 #. Description of the plugin
 #: glider-galleries.php
 msgid ""
-"Simple plugin that replaces Jetpack slideshows and adds a block to create "
-"new Glider galleries."
+"Adds a block to create lightweight media galleries, and replaces pre-"
+"existing Jetpack slideshows in a non-destructive manner."
 msgstr ""
-"Semplice plugin che sostituisce gli slideshow Jetpack pre-esistenti e "
-"aggiunge un blocco dell'editor per creare nuove gallerie Glider."
+"Aggiunge un blocco per creare gallerie media leggere, e sostituisce pre-"
+"esistenti slideshow Jetpack in modo non-distruttivo."
 
-#: glider-galleries.php:88 block.js:13
-msgid "Glider Gallery"
-msgstr "Galleria Glider"
+#. Author of the plugin
+#: glider-galleries.php
+msgid "Alex Camilleri"
+msgstr ""
 
-#: block.js:52
+#: block.js:30
+msgid "Missing image or loading..."
+msgstr "Immagine mancante o in caricamento..."
+
+#: block.js:63
 msgid "Edit Gallery"
 msgstr "Modifica Galleria"
 
-#: block.js:52
+#: block.js:64
 msgid "Select Images"
 msgstr "Seleziona Immagini"
 
 #: glider-jetpack-editor.js:18
 msgid ""
-"✅ This Jetpack gallery will automatically be converted to a Glider "
-"gallery."
+"✅ This Jetpack gallery will automatically be converted to a Glider gallery."
 msgstr ""
-"✅ Questa galleria Jetpack verrà automaticamente convertita in una "
-"galleria Glider."
+"✅ Questa galleria Jetpack verrà automaticamente convertita in una galleria "
+"Glider."
 
 #: block.json
 msgctxt "block title"
@@ -58,5 +67,14 @@ msgstr "Galleria Glider"
 #: block.json
 msgctxt "block description"
 msgid "Simple media gallery overriding pre-existing Jetpack slideshows."
-msgstr ""
-"Semplice galleria media che sostituisce quelle Jetpack pre-esistenti."
+msgstr "Semplice galleria media che sostituisce quelle Jetpack pre-esistenti."
+
+#~ msgid ""
+#~ "Simple plugin that replaces Jetpack slideshows and adds a block to create "
+#~ "new Glider galleries."
+#~ msgstr ""
+#~ "Semplice plugin che sostituisce gli slideshow Jetpack pre-esistenti e "
+#~ "aggiunge un blocco dell'editor per creare nuove gallerie Glider."
+
+#~ msgid "Glider Gallery"
+#~ msgstr "Galleria Glider"
