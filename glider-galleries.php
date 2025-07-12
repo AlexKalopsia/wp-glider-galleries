@@ -2,8 +2,8 @@
 /**
  * Plugin Name: WP Glider Galleries
  * Plugin URI: https://github.com/AlexKalopsia/wp-glider-galleries
- * Description: Simple plugin that replaces Jetpack slideshows and adds a block to create new Glider galleries.
- * Version: 1.1
+ * Description: Adds a block to create lightweight media galleries, and replaces pre-existing Jetpack slideshows in a non-destructive manner.
+ * Version: 1.1.1
  * Author: Alex Camilleri
  * Domain Path: /languages
  */
@@ -37,16 +37,6 @@ add_action('wp_enqueue_scripts', function () {
             });
         });
     ");
-});
-
-// Enqueue style: editor
-add_action('enqueue_block_editor_assets', function() {
-    wp_enqueue_style(
-        'glider-block-editor-styles', 
-        plugins_url('style.css', __FILE__),
-        [],
-        filemtime(plugin_dir_path(__FILE__) . 'style.css')
-    );
 });
 
 // Shortcode: [glider_gallery ids="123,124,125"]
@@ -110,6 +100,23 @@ function glider_register_block() {
 }
 add_action('init', 'glider_register_block');
 
+function glider_render_gallery($attributes) {
+    $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
+    return do_shortcode("[glider_gallery ids=\"$ids\"]");
+}
+
+// Enqueue: style
+function glider_enqueue_style() {
+    wp_enqueue_style(
+        'glider-block-editor-styles', 
+        plugins_url('style.css', __FILE__),
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'style.css')
+    );
+}
+add_action('enqueue_block_editor_assets', 'glider_enqueue_style');
+
+// Enqueue: translation
 function glider_set_block_translations() {
     wp_set_script_translations(
         'glider-gallery-block',
@@ -119,7 +126,7 @@ function glider_set_block_translations() {
 }
 add_action('enqueue_block_editor_assets', 'glider_set_block_translations');
 
-// Enqueue script: Jetpack gallery warning
+// Enqueue: Jetpack gallery warning
 function glider_enqueue_editor_notice() {
     wp_register_script(
         'glider-jetpack-editor',
@@ -133,8 +140,3 @@ function glider_enqueue_editor_notice() {
     wp_enqueue_script('glider-jetpack-editor');
 }
 add_action('enqueue_block_editor_assets', 'glider_enqueue_editor_notice');
-
-function glider_render_gallery($attributes) {
-    $ids = implode(',', array_map('intval', $attributes['ids'] ?? []));
-    return do_shortcode("[glider_gallery ids=\"$ids\"]");
-}
