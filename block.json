@@ -2,10 +2,10 @@
   "apiVersion": 2,
   "name": "glider/gallery",
   "title": "Glider Gallery",
-  "description": "Simple media gallery overriding pre-existing Jetpack slideshows.",
+  "description": "Lightweight media gallery block.",
   "category": "media",
   "icon": "images-alt2",
-  "version": "1.1",
+  "version": "1.1.1",
   "textdomain": "wp-glider-galleries",
   "editorScript": "glider-gallery-block",
   "editorStyle": "glider-block-editor-styles",
@@ -22,7 +22,7 @@
   },
   "example": {
     "attributes": {
-      "ids": [1, 2, 3, 4]
+      "ids": [99996, 99997, 99998, 99999]
     }
   }
 }
